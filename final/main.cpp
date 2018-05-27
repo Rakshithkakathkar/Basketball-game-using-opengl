@@ -96,6 +96,7 @@ void poles(int a, int b, int c, int d)
 	glVertex3fv(firstPoleVertices[c]);
 	glVertex3fv(firstPoleVertices[d]);
 	glEnd();
+
 	//second pole
 	//fills the pole
 	glBegin(GL_POLYGON);
@@ -105,6 +106,7 @@ void poles(int a, int b, int c, int d)
 	glVertex3fv(secondPoleVertices[c]);
 	glVertex3fv(secondPoleVertices[d]);
 	glEnd();
+
 	//draws the basic pole outline
 	glBegin(GL_LINE_LOOP);
 	glColor3f(43.0 / 255.0, 39.0/ 255.0, 37.0/ 255.0);
@@ -138,6 +140,7 @@ void onBoardLines(float a, float b, float c, float d)
 	glVertex3f(d, c, -4.29);
 	glVertex3f(a, c, -4.29);
 	glEnd();
+
     //square on the board near the net, opposite side
 	glBegin(GL_POLYGON);
 	glColor3f(1.0, 1.0, 1.0);
@@ -158,6 +161,7 @@ void board(int a, int b, int c, int d)
 	glVertex3fv(firstBoardVertices[c]);
 	glVertex3fv(firstBoardVertices[d]);
 	glEnd();
+
     //black outline for the board throwing side
 	glBegin(GL_LINE_LOOP);
 	glColor3f(86.0/255.0, 86.0/255.0, 86.0/255.0);
@@ -166,6 +170,7 @@ void board(int a, int b, int c, int d)
 	glVertex3fv(firstBoardVertices[c]);
 	glVertex3fv(firstBoardVertices[d]);
 	glEnd();
+
     //draw board on the nearer side
 	glBegin(GL_POLYGON);
 	glColor3f(0.5, 0.5, 0.5);
@@ -174,6 +179,7 @@ void board(int a, int b, int c, int d)
 	glVertex3fv(secondBoardVertices[c]);
 	glVertex3fv(secondBoardVertices[d]);
 	glEnd();
+
     //black outline for the nearer board
 	glBegin(GL_LINE_LOOP);
 	glColor3f(86.0/255.0, 86.0/255.0, 86.0/255.0);
@@ -204,6 +210,7 @@ void base(int a, int b, int c, int d)
 	glVertex3fv(baseVertices[d]);
 	glEnd();
 }
+
 void polygon(int a, int b, int c, int d)
 {
 	base(0, 1, 3, 2);
@@ -212,6 +219,7 @@ void polygon(int a, int b, int c, int d)
 	base(0, 1, 5, 4);
 	base(0, 2, 6, 4);
 	base(1, 3, 7, 5);
+
 	//court color
 	glBegin(GL_POLYGON);
 	glColor3f(0.0, 0.4, 1.0);
@@ -223,6 +231,7 @@ void polygon(int a, int b, int c, int d)
 	glColor3f(0.0, 0.4, 1.0);
 	glVertex3fv(courtVertices[d]);
 	glEnd();
+
 	// pole from bast to the top
 	poles(0, 1, 3, 2);
 	poles(4, 5, 7, 6);
@@ -244,7 +253,7 @@ void polygon(int a, int b, int c, int d)
 	board(1, 3, 7, 5);
 	board(0, 1, 5, 4);
 	board(3, 7, 6, 2);
-	// remove the comments to draw the board faces
+
 
 	//center line
 	lines(-2.5, -0.05, 0.05, 2.5);
@@ -359,7 +368,7 @@ void ball()
 	}
 	else
 	{
-		glTranslatef(0.0, 0.8, -2.8); //calculated using the last vertex of parabola
+		glTranslatef(0.0, 0.8, -2.8); //calculated using the last vertex of parabola, moves the ball if u change the z axis
 	}
 	glColor3f(0.81176, 0.3254, 0.0);
 	glutSolidSphere(0.15, 1000, 20);//radius,slices(longitudes),stacks(latitudes)
@@ -670,7 +679,7 @@ void characterDesign(int a, int b, int c, int d)
 void character()
 {
 	glScalef(0.7, 0.7, 0.7);
-	glTranslatef(0.0, -0.4, -1.5);
+	glTranslatef(0.0, -0.4, -1.5);//brings the character on the blue court, moves the character near the semi circle if z value is -2.5
 	characterDesign(0, 1, 2, 3);
 	characterDesign(4, 5, 6, 7);
 	characterDesign(0, 1, 5, 4);
@@ -734,7 +743,7 @@ void update(int value)
 	}
 	if(getball && y >= -2 && z >= -1.0)
 	{
-		y = -(2 * dz * dz) + 3.6;
+		y = -(2 * dz * dz) + 3.6;//distance between the robot and the net, if the robot and the ball is moved change +3.6 to any suitable value
 		dz -= 0.05;
 	}
 	else
@@ -744,13 +753,18 @@ void update(int value)
 		getball = 0;
 	}
 	glutPostRedisplay();
-	glutTimerFunc(25,update,0);//"update" function is called every 25msecs and 0 is passed as argument for update function
+	glutTimerFunc(25,update,0);//"update" function is called every 25 msecs and 0 is passed as argument for update function
 }
 
 void mouse(int btn, int state, int x, int y)
 {
 	if(btn == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 		axis = 1;
+	/*if(btn == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+		axis = 2;
+	if(btn == GLUT_MIDDLE_BUTTON && state == GLUT_DOWN)
+		axis = 0;*/
+
 	theta[axis] += 2.0;
 	if(theta[axis] > 360.0)
 		theta[axis] -= 360.0;
@@ -780,8 +794,8 @@ void keys(unsigned char key, int x, int y)
 	if(key == 'Z'  && viewer[2] != 10) viewer[2] += 1.0;
 	if(key == 's' || key == 'S')
 	{
-		getball = 1;
-		firsttime = 1;
+		getball = true;
+		firsttime = true;
 	}
 	display();
 }
